@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: healthcare_platform
+    database: workspace
+    schema: healthcare_platform
+    tables:
+      - name: patients
+      - name: vitals
+      - name: medications
