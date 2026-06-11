@@ -30,5 +30,5 @@ The project includes a **real-time embedded dashboard** built with **Streamlit**
 │   ├── staging/      # Initial cleaning and type casting
 │   ├── marts/        # Aggregated business logic for healthcare KPIs
 │   └── docs/         # Documentation and schema definitions
-├── tests/            # Data quality tests (schema & uniqueness)
+├── tests in schema.yml file in each layer/            # Data quality tests (schema & uniqueness)
 └── dbt_project.yml   # Configuration and orchestration settings
