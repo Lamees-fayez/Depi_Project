@@ -37,7 +37,7 @@ latest_vitals AS (
             ) AS rn
         FROM {{ ref('silver_vitals') }}
     )
-    WHERE rn = 1  -- إزالة شرط الـ IS NOT NULL الصارم للسماح بمرور القراءات بشكل أسرع
+    WHERE rn = 1
 ),
 
 latest_medication AS (
@@ -61,7 +61,6 @@ latest_medication AS (
 
 assembled AS (
     SELECT
-        -- استخدام COALESCE لضمان أخذ الـ ID من أي جدول متاح لتفادي مشاكل الـ LEFT JOIN مع المرضى الجدد
         COALESCE(ps.patient_id, lv.patient_id, lm.patient_id, sp.patient_id) AS patient_id,
         COALESCE(ps.full_name, 'New Patient / No Summary Yet') AS full_name,
         ps.age_years,
@@ -72,7 +71,6 @@ assembled AS (
         r.risk_level,
         COALESCE(r.composite_risk_score, 0) AS composite_risk_score,
 
-        -- استخدام COALESCE لتجنب القيم الفارغة في واجهة التطبيق
         COALESCE(ps.avg_systolic_bp, 0) AS avg_systolic_bp,
         COALESCE(ps.avg_diastolic_bp, 0) AS avg_diastolic_bp,
         COALESCE(ps.avg_heart_rate, 0) AS avg_heart_rate,
@@ -103,7 +101,6 @@ assembled AS (
         ps._gold_loaded_at,
         current_timestamp() AS _dashboard_built_at
 
-    -- جعل التجميع يبدأ من جدول معلومات المرضى لضمان عدم سقوط أي مريض جديد مضاف في النظام
     FROM silver_patients_info sp
     LEFT JOIN patient_summary ps ON sp.patient_id = ps.patient_id
     LEFT JOIN risk r ON sp.patient_id = r.patient_id
